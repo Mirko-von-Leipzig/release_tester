@@ -36,7 +36,7 @@ jobs:
 
       - name: Create tag
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_2 }}
         run: |
           # HASH=$(git rev-parse HEAD)
           # echo $HASH
@@ -49,7 +49,7 @@ jobs:
 
       - name: Create release notes draft
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_2 }}
         run: |
           gh api \
             --method POST \
