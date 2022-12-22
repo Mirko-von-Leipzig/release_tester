@@ -15,39 +15,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Update pathfinder package version
-      #   run: echo 'Might be difficult to do and commit to main?'
+      - name: Update pathfinder package version
+        run: |
+          sed -i -e 's/version = ".*"/version = "${{ github.event.inputs.version }}"/' crates/pathfinder/Cargo.toml
+          git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
 
-      # - name: switching from HTTPS to SSH
-      #   run: git remote set-url origin ${{ secrets.BOT_SSH }}
-
-      # - name: commit
-      #   run: |
-      #     # not inline because otherwise github's yaml parser misinterprets the colon as a mapping.
-      #     git commit -m 'feat: version ${{ github.event.inputs.version }}'
-
-      # - name: push
-      #   run: git push origin HEAD:master
-
-      # - name: tag ${{ github.event.inputs.version }}
-      #   run: |
-      #     git tag ${{ github.event.inputs.version }}
-      #     git push origin ${{ github.event.inputs.version }}
-
-      - name: Get hash
+      - name: Get new git hash
         id: hash
         run: echo "HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Push commit to origin
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_2 }}
+        run: | 
+            gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/Mirko-von-Leipzig/release_tester/git/refs \
+            -f ref='refs/heads/master' \
+            -f sha='${{ steps.hash.outputs.HASH }}'
 
       - name: Create tag
         env:
           GH_TOKEN: ${{ secrets.RELEASE_2 }}
         run: |
-          echo "${{ steps.hash.outputs.HASH }}"
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/git/refs \
-            -f ref='refs/tags/${{ github.event.inputs.version }}' \
+            -f ref='refs/tags/v${{ github.event.inputs.version }}' \
             -f sha='${{ steps.hash.outputs.HASH }}'
 
       - name: Create release notes draft
@@ -58,9 +54,9 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
               /repos/Mirko-von-Leipzig/release_tester/releases \
-            -f tag_name='${{ github.event.inputs.version }}' \
+            -f tag_name='v${{ github.event.inputs.version }}' \
             -f target_commitish='master' \
-            -f name='${{ github.event.inputs.version }}' \
+            -f name='v${{ github.event.inputs.version }}' \
             -f body='Description of the release' \
             -F draft=true \
             -F prerelease=false \
