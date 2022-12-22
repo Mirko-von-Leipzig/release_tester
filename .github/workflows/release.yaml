@@ -1,0 +1,50 @@
+name: "release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version of this pathfinder release. This will create a new tag (triggering docker action) and also set the package version."
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # - name: Update pathfinder package version
+      #   run: echo 'Might be difficult to do and commit to main?'
+
+      # - name: switching from HTTPS to SSH
+      #   run: git remote set-url origin ${{ secrets.BOT_SSH }}
+
+      # - name: commit
+      #   run: |
+      #     # not inline because otherwise github's yaml parser misinterprets the colon as a mapping.
+      #     git commit -m 'feat: version ${{ github.event.inputs.version }}'
+
+      # - name: push
+      #   run: git push origin HEAD:master
+
+      # - name: tag ${{ github.event.inputs.version }}
+      #   run: |
+      #     git tag ${{ github.event.inputs.version }}
+      #     git push origin ${{ github.event.inputs.version }}
+
+      - name: Create release notes draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+              /repos/eqlabs/pathfinder/releases \
+            -f tag_name='${{ github.event.inputs.version }}' \
+            -f target_commitish='master' \
+            -f name='${{ github.event.inputs.version }}' \
+            -f body='Description of the release' \
+            -F draft=true \
+            -F prerelease=false \
+            -F generate_release_notes=true 
