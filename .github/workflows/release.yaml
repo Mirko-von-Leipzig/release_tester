@@ -22,12 +22,16 @@ jobs:
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
           git tag v${{ github.event.inputs.version }}
 
+      # - name: Push commit to origin
+      #   uses: ad-m/github-push-action@v0.6.0
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
+      #     tags: true
+
       - name: Push commit to origin
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
+        run: |
+          git push
 
       - name: Create release notes draft
         env:
