@@ -23,7 +23,7 @@ jobs:
           git tag v${{ github.event.inputs.version }}
 
       - name: Push commit to origin
-        uses: ad-m/github-push-action@v0.6
+        uses: ad-m/github-push-action@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
