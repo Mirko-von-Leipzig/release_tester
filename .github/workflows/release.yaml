@@ -34,16 +34,21 @@ jobs:
       #     git tag ${{ github.event.inputs.version }}
       #     git push origin ${{ github.event.inputs.version }}
 
+      - name: Get hash
+        id: hash
+        run: echo "HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
       - name: Create tag
         env:
           GH_TOKEN: ${{ secrets.RELEASE_2 }}
         run: |
+          echo "${{ steps.hash.outputs.HASH }}"
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/git/refs \
             -f ref='${{ github.event.inputs.version }}' \
-            -f sha=$(git rev-parse HEAD)
+            -f sha='${{ steps.hash.outputs.HASH }}'
 
       - name: Create release notes draft
         env:
