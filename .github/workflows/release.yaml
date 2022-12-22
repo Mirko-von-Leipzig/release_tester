@@ -34,6 +34,17 @@ jobs:
       #     git tag ${{ github.event.inputs.version }}
       #     git push origin ${{ github.event.inputs.version }}
 
+      - name: Create tag
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/OWNER/REPO/git/refs \
+            -f ref='refs/tags/${{ github.event.inputs.version }}' \
+            -f sha='$(git rev-parse HEAD)'
+
       - name: Create release notes draft
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
