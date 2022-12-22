@@ -10,7 +10,6 @@ on:
 
 jobs:
   release:
-    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,31 +22,16 @@ jobs:
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
           git tag v${{ github.event.inputs.version }}
 
-      # - name: Get new git hash
-      #   id: hash
-      #   run: echo "HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
       - name: Push commit to origin
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
           tags: true
 
-      # - name: Create tag
-      #   env:
-      #     GH_TOKEN: ${{ secrets.RELEASE_2 }}
-      #   run: |
-      #     gh api \
-      #       --method POST \
-      #       -H "Accept: application/vnd.github+json" \
-      #       /repos/Mirko-von-Leipzig/release_tester/git/refs \
-      #       -f ref='refs/tags/v${{ github.event.inputs.version }}' \
-      #       -f sha='${{ steps.hash.outputs.HASH }}'
-
       - name: Create release notes draft
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_2 }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api \
             --method POST \
