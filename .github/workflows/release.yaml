@@ -18,35 +18,32 @@ jobs:
       - name: Update pathfinder package version
         run: |
           sed -i -e 's/version = ".*"/version = "${{ github.event.inputs.version }}"/' crates/pathfinder/Cargo.toml
-          git config --global user.email "not@real"
-          git config --global user.name "Pathfinder release bot"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
+          git tag v${{ github.event.inputs.version }}
 
-      - name: Get new git hash
-        id: hash
-        run: echo "HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+      # - name: Get new git hash
+      #   id: hash
+      #   run: echo "HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Push commit to origin
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_2 }}
-        run: | 
-            gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/Mirko-von-Leipzig/release_tester/git/refs \
-            -f ref='refs/heads/master' \
-            -f sha='${{ steps.hash.outputs.HASH }}'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
 
-      - name: Create tag
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_2 }}
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/Mirko-von-Leipzig/release_tester/git/refs \
-            -f ref='refs/tags/v${{ github.event.inputs.version }}' \
-            -f sha='${{ steps.hash.outputs.HASH }}'
+      # - name: Create tag
+      #   env:
+      #     GH_TOKEN: ${{ secrets.RELEASE_2 }}
+      #   run: |
+      #     gh api \
+      #       --method POST \
+      #       -H "Accept: application/vnd.github+json" \
+      #       /repos/Mirko-von-Leipzig/release_tester/git/refs \
+      #       -f ref='refs/tags/v${{ github.event.inputs.version }}' \
+      #       -f sha='${{ steps.hash.outputs.HASH }}'
 
       - name: Create release notes draft
         env:
