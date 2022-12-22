@@ -18,6 +18,8 @@ jobs:
       - name: Update pathfinder package version
         run: |
           sed -i -e 's/version = ".*"/version = "${{ github.event.inputs.version }}"/' crates/pathfinder/Cargo.toml
+          git config --global user.email "not@real"
+          git config --global user.name "Pathfinder release bot"
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
 
       - name: Get new git hash
