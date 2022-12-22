@@ -43,7 +43,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/git/refs \
             -f ref='${{ github.event.inputs.version }}' \
-            -f sha=$(git rev-parse HEAD)'
+            -f sha=$(git rev-parse HEAD)
 
       - name: Create release notes draft
         env:
