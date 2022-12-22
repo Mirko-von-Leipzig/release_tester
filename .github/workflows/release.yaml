@@ -35,8 +35,6 @@ jobs:
       #     git push origin ${{ github.event.inputs.version }}
 
       - name: Create tag
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           HASH=$(git rev-parse HEAD)
           echo $HASH
@@ -48,8 +46,6 @@ jobs:
             -f sha='ed56f70653797b97272bc8b59bb3bb39ce24f382'
 
       - name: Create release notes draft
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api \
             --method POST \
