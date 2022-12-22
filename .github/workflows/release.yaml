@@ -41,7 +41,7 @@ jobs:
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
-              /repos/eqlabs/pathfinder/releases \
+              /repos/Mirko-von-Leipzig/release_tester/releases \
             -f tag_name='${{ github.event.inputs.version }}' \
             -f target_commitish='master' \
             -f name='${{ github.event.inputs.version }}' \
