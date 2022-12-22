@@ -47,7 +47,7 @@ jobs:
             --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/git/refs \
-            -f ref='${{ github.event.inputs.version }}' \
+            -f ref='refs/tags/${{ github.event.inputs.version }}' \
             -f sha='${{ steps.hash.outputs.HASH }}'
 
       - name: Create release notes draft
