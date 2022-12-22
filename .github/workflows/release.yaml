@@ -38,13 +38,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
-          echo "$(git rev-parse HEAD)"
+          HASH=$(git rev-parse HEAD)
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/OWNER/REPO/git/refs \
             -f ref='refs/tags/${{ github.event.inputs.version }}' \
-            -f sha="$(git rev-parse HEAD)"
+            -f sha=$(git rev-parse HEAD)
 
       - name: Create release notes draft
         env:
