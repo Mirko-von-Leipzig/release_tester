@@ -48,7 +48,7 @@ jobs:
 
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
           if [ "${{ github.actor }}" == kkovaacs ]; then
             email=${{ secrets.EMAIL_KKOVAACS }}
