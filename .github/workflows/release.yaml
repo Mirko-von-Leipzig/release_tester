@@ -19,21 +19,10 @@ jobs:
           echo "::error::branch This action may only be run on 'master' branch"
           exit 1
 
-      - name: Get registration token
-        id: getRegToken
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_2 }}
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-              /repos/Mirko-von-Leipzig/release_tester/actions/runners/registration-token \
-          # curl -X POST -H \"Accept: application/vnd.github.v3+json\"  -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/Mirko-von-Leipzig/release_tester/actions/runners/registration-token
-
       - name: Remove master branch protection
         id: branch-protection
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_2 }}
         run: |
           curl \
             -H "Accept: application/vnd.github+json" \
