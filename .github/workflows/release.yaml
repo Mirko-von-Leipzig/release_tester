@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --local user.email "${{ github.actor }}@users.noreply.github.com"
           git config --local user.name "${{ github.actor }}"
-          git switch -c release_branch
+          git switch -c release-${{ github.event.inputs.version }}
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
           git push --set-upstream origin release_branch
 
@@ -43,14 +43,14 @@ jobs:
 
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_3 }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh pr review --approve
           gh pr merge --delete-branch --merge
             
       - name: Tag & release notes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           git switch master
           git pull
