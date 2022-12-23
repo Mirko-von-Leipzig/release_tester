@@ -49,10 +49,8 @@ jobs:
       - name: Restore master branch protection
         if: always()
         run: |
-          # echo "${{ steps.branch_protection.outputs.rules }}"
-
           curl \
-            -X GET \
+            -X PUT \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.RELEASE_3 }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
