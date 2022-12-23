@@ -57,6 +57,7 @@ jobs:
           elif [ "${{ github.actor }}" == sergey-melnychuk ]; then
             echo "email=${{ secrets.EMAIL_SERGEY }}" >> $GITHUB_ENV
           else
+            echo "we are in mirko"
             echo "email=${{ secrets.EMAIL_MIRKO }}" >> $GITHUB_ENV
           fi
 
