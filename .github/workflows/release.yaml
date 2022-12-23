@@ -21,7 +21,9 @@ jobs:
       - name: Remove master branch protection
         id: branch-protection
         run: |
-          echo "rules=$(gh api -H "Accept: application/vnd.github+json" /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)" >> $GITHUB_OUTPUT
+          rules=$(gh api -H "Accept: application/vnd.github+json" /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
+          echo $rules
+          echo "rules=$($rules)" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v3
 
