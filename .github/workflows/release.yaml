@@ -31,7 +31,7 @@ jobs:
 
           rules=$(echo $rules | jq -c '{
             required_status_checks: .required_status_checks | del(.url),
-            enforce_admins: .enforce_admins.enabled | del(.url),
+            enforce_admins: .enforce_admins.enabled,
             required_pull_request_reviews: .required_pull_request_reviews | del(.url),
             restrictions: .restrictions | del(.url),
           }')
