@@ -28,7 +28,13 @@ jobs:
           rules=$(gh api \
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
+
+          echo $rules
+
           rules=$(echo $rules | jq 'del(.url)')
+
+          echo $rules
+
           echo "rules=$rules" >> $GITHUB_OUTPUT
 
       # - name: Remove master branch protection
