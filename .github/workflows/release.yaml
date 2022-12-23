@@ -33,7 +33,7 @@ jobs:
 
           rules=$(echo $rules | jq)
 
-          # echo $rules
+          echo $rules
 
           # echo "rules=$rules" >> $GITHUB_OUTPUT
 
