@@ -31,7 +31,7 @@ jobs:
 
           echo $rules
 
-          rules=$(echo $rules | jq 'del(.url)')
+          rules=$(echo $rules | jq -c 'del(.url)')
 
           echo $rules
 
