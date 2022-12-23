@@ -46,7 +46,7 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
           gh pr review --approve
-          gh pr merge --author-email "${{ github.actor }}@users.noreply.github.com" --delete-branch --merge
+          gh pr merge --delete-branch --merge
             
       - name: Tag & release notes
         env:
