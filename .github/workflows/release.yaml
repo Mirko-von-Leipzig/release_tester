@@ -48,12 +48,20 @@ jobs:
 
       - name: Approve PR
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_3 }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
-          echo "The email is ${{ steps.test.outputs.email }}
+          if [ "${{ github.actor }}" == kkovaacs ]; then
+            email=${{ secrets.EMAIL_KKOVAACS }}
+          elif [ "${{ github.actor }}" == CHr15F0x ]; then
+            email=${{ secrets.EMAIL_CHR15F0X }}
+          elif [ "${{ github.actor }}" == sergey-melnychuk ]; then
+            email=${{ secrets.EMAIL_SERGEY }}
+          else
+            email=${{ secrets.EMAIL_MIRKO }}
+          fi
 
           gh pr review --approve
-          gh pr merge --delete-branch --merge
+          gh pr merge --delete-branch --author-email $email --merge
             
       - name: Tag & release notes
         env:
