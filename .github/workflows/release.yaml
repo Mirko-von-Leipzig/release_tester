@@ -33,7 +33,7 @@ jobs:
           git config --local user.name "${{ github.actor }}"
           git switch -c release-${{ github.event.inputs.version }}
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
-          git push --set-upstream origin release_branch
+          git push --set-upstream origin release-${{ github.event.inputs.version }}
 
           gh pr create --base master --fill
 
