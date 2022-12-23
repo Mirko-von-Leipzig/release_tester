@@ -20,7 +20,7 @@ jobs:
           exit 1
 
       - name: Remove master branch protection
-        id: branch-protection
+        id: branch_protection
         env:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
@@ -29,7 +29,7 @@ jobs:
             /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
 
           echo $rules
-          echo "rules=$($rules)" >> $GITHUB_OUTPUT
+          echo "rules=$rules" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v3
 
@@ -47,7 +47,7 @@ jobs:
 
       - name: re-enable master branch protection
         run: |
-          echo "${{ steps.branch-protection.outputs.rules }}"
+          echo "${{ steps.branch_protection.outputs.rules }}"
 
       # - name: Create release notes draft
       #   env:
