@@ -37,19 +37,20 @@ jobs:
 
           gh pr create --base master --fill
 
-
           # git tag v${{ github.event.inputs.version }}
           # git push --atomic origin master v${{ github.event.inputs.version }}
+
+      - name: get email
+        id: test
+        uses: evvanErb/get-github-email-by-username-action@v1.25
+        with:
+          github-username: '${{ github.actor }}'
 
       - name: Approve PR
         env:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
-          user=$(gh api \
-            -H "Accept: application/vnd.github+json" \
-            /search/users?q=${{ github.actor }})
-
-          echo $user
+          echo "The email is ${{ steps.test.outputs.email }}
 
           gh pr review --approve
           gh pr merge --delete-branch --merge
