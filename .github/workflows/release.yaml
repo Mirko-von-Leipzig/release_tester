@@ -22,7 +22,7 @@ jobs:
       - name: Remove master branch protection
         id: branch-protection
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_2 }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # curl \
           #   -H "Accept: application/vnd.github+json" \
@@ -32,7 +32,7 @@ jobs:
 
           gh api \
             -H "Accept: application/vnd.github+json" \
-            /repos/Mirko-von-Leipzig/release_tester/branches
+            /repos/Mirko-von-Leipzig/release_tester/branches/master
 
           # rules=$(gh api -H "Accept: application/vnd.github+json" /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
           # echo $rules
