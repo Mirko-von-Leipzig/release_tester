@@ -56,7 +56,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.RELEASE_3 }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/OWNER/REPO/branches/BRANCH/protection \
+            https://api.github.com/Mirko-von-Leipzig/release_tester/branches/master/protection \
             -d '${{ steps.branch_protection.outputs.rules }}'
             
       # - name: Create release notes draft
