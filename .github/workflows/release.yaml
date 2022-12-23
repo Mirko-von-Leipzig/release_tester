@@ -21,6 +21,8 @@ jobs:
 
       - name: Get registration token
         id: getRegToken
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api \
             --method POST \
