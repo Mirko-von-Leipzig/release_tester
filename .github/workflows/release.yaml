@@ -39,7 +39,7 @@ jobs:
 
       - name: re-enable master branch protection
         run: |
-          echo steps.branch-protection.outputs.rules
+          echo "${{ steps.branch-protection.outputs.rules }}"
 
       # - name: Create release notes draft
       #   env:
