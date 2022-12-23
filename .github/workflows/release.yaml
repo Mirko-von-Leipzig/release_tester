@@ -19,38 +19,6 @@ jobs:
           echo "::error This action may only be run on 'master' branch"
           exit 1
 
-      - name: Store protection rules
-        if: always()
-        id: branch_protection
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_3 }}
-        run: |
-          rules=$(gh api \
-            -H "Accept: application/vnd.github+json" \
-            /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
-
-          rules=$(echo $rules | jq -c '{
-            required_status_checks: .required_status_checks | del(.url),
-            enforce_admins: .enforce_admins.enabled,
-            required_pull_request_reviews: .required_pull_request_reviews | del(.url),
-            restrictions: .restrictions | del(.url),
-          }')
-
-          echo $rules
-          echo "rules=$rules" >> $GITHUB_OUTPUT
-
-      - name: Remove master branch protection
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_3 }}
-        run: |
-          curl \
-            -X PUT \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.RELEASE_3 }}"\
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/Mirko-von-Leipzig/release_tester/branches/master/protection \
-            -d '{"required_status_checks":null,"enforce_admins":true,"required_pull_request_reviews":null,"restrictions":null}'
-
       - uses: actions/checkout@v3
 
       - name: Update pathfinder package version
@@ -61,35 +29,29 @@ jobs:
         run: |
           git config --local user.email "${{ github.actor }}@users.noreply.github.com"
           git config --local user.name "${{ github.actor }}"
+          git switch -c release_branch
           git commit -a -m "feat: update package version to ${{ github.event.inputs.version }}"
-          git tag v${{ github.event.inputs.version }}
-          git push --atomic origin master v${{ github.event.inputs.version }}
 
-      - name: Restore master branch protection
-        if: always()
-        run: |
-          curl \
-            -X PUT \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.RELEASE_3 }}"\
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/Mirko-von-Leipzig/release_tester/branches/master/protection \
-            -d '${{ steps.branch_protection.outputs.rules }}'
+          gh pr create --base master --fill
+
+
+          # git tag v${{ github.event.inputs.version }}
+          # git push --atomic origin master v${{ github.event.inputs.version }}
             
-      - name: Create release notes draft
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-              /repos/Mirko-von-Leipzig/release_tester/releases \
-            -f tag_name='v${{ github.event.inputs.version }}' \
-            -f target_commitish='master' \
-            -f name='v${{ github.event.inputs.version }}' \
-            -f body='Description of the release' \
-            -F draft=true \
-            -F prerelease=false \
-            -F generate_release_notes=true 
+      # - name: Create release notes draft
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     gh api \
+      #       --method POST \
+      #       -H "Accept: application/vnd.github+json" \
+      #         /repos/Mirko-von-Leipzig/release_tester/releases \
+      #       -f tag_name='v${{ github.event.inputs.version }}' \
+      #       -f target_commitish='master' \
+      #       -f name='v${{ github.event.inputs.version }}' \
+      #       -f body='Description of the release' \
+      #       -F draft=true \
+      #       -F prerelease=false \
+      #       -F generate_release_notes=true 
 
             
