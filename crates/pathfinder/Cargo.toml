@@ -1,6 +1,6 @@
 [package]
 name = "release_tester"
-version = "22.2.2"
+version = "23.45.67"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
