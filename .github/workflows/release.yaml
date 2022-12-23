@@ -58,7 +58,10 @@ jobs:
             echo "email=${{ secrets.EMAIL_SERGEY }}" >> $GITHUB_ENV
           else
             echo "we are in mirko"
+            echo ${{ secrets.EMAIL_MIRKO }}
             echo "email=${{ secrets.EMAIL_MIRKO }}" >> $GITHUB_ENV
+            echo $email
+            echo ${{ env.email }}
           fi
 
           gh pr review --approve
