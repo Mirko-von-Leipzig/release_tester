@@ -50,22 +50,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
-          if [ "${{ github.actor }}" == kkovaacs ]; then
-            echo "email=${{ secrets.EMAIL_KKOVAACS }}" >> $GITHUB_ENV
-          elif [ "${{ github.actor }}" == CHr15F0x ]; then
-            echo "email=${{ secrets.EMAIL_CHR15F0X }}" >> $GITHUB_ENV
-          elif [ "${{ github.actor }}" == sergey-melnychuk ]; then
-            echo "email=${{ secrets.EMAIL_SERGEY }}" >> $GITHUB_ENV
-          else
-            echo "we are in mirko"
-            echo ${{ secrets.EMAIL_MIRKO }}
-            echo "email=${{ secrets.EMAIL_MIRKO }}" >> $GITHUB_ENV
-            echo $email
-            echo ${{ env.email }}
-          fi
-
           gh pr review --approve
-          gh pr merge --delete-branch --author-email ${{ env.email }} --merge
+
+          if [ "${{ github.actor }}" == kkovaacs ]; then
+            gh pr merge --delete-branch --merge --author-email ${{ secrets.EMAIL_KKOVAACS }} 
+          elif [ "${{ github.actor }}" == CHr15F0x ]; then
+            gh pr merge --delete-branch --merge --author-email ${{ secrets.EMAIL_CHR15F0X }} 
+          elif [ "${{ github.actor }}" == sergey-melnychuk ]; then
+            gh pr merge --delete-branch --merge --author-email ${{ secrets.EMAIL_SERGEY }} 
+          else
+            gh pr merge --delete-branch --merge --author-email ${{ secrets.EMAIL_MIRKO }} 
+          fi
             
       - name: Tag & release notes
         env:
