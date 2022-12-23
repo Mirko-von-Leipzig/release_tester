@@ -16,10 +16,11 @@ jobs:
       - name: branch verification
         if: github.ref_name != 'master' || github.ref_type != 'branch'
         run: |
-          echo "::error::branch This action may only be run on 'master' branch"
+          echo "::error This action may only be run on 'master' branch"
           exit 1
 
-      - name: Remove master branch protection
+      - name: Store original master branch protection
+        if: always()
         id: branch_protection
         env:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
@@ -27,9 +28,9 @@ jobs:
           rules=$(gh api \
             -H "Accept: application/vnd.github+json" \
             /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
-
-          echo $rules
           echo "rules=$rules" >> $GITHUB_OUTPUT
+
+      # - name: Remove master branch protection
 
       - uses: actions/checkout@v3
 
@@ -45,10 +46,16 @@ jobs:
       #     git tag v${{ github.event.inputs.version }}
       #     git push --atomic origin master v${{ github.event.inputs.version }}
 
-      - name: re-enable master branch protection
+      - name: Restore master branch protection
+        if: always()
         run: |
-          echo "${{ steps.branch_protection.outputs.rules }}"
+          # echo "${{ steps.branch_protection.outputs.rules }}"
 
+          gh api \ 
+            --method PUT
+            -H "Accept: application/vnd.github+json" \
+            /repos/Mirko-von-Leipzig/release_tester/branches/master/protection \
+            ${{ steps.branch_protection.outputs.rules }}
       # - name: Create release notes draft
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
