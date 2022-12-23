@@ -32,7 +32,7 @@ jobs:
 
           gh api \
             -H "Accept: application/vnd.github+json" \
-            /repos/Mirko-von-Leipzig/release_tester/branches/master
+            /repos/Mirko-von-Leipzig/release_tester/branches/master/protection
 
           # rules=$(gh api -H "Accept: application/vnd.github+json" /repos/Mirko-von-Leipzig/release_tester/branches/master/protection)
           # echo $rules
