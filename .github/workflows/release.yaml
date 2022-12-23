@@ -2,6 +2,8 @@ name: "release"
 
 on:
   workflow_dispatch:
+    branches:
+      master
     inputs:
       version:
         description: "The version of this pathfinder release. This will create a new tag (triggering docker action) and also set the package version."
