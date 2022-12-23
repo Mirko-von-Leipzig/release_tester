@@ -51,17 +51,17 @@ jobs:
           GH_TOKEN: ${{ secrets.RELEASE_3 }}
         run: |
           if [ "${{ github.actor }}" == kkovaacs ]; then
-            email=${{ secrets.EMAIL_KKOVAACS }}
+            echo "email=${{ secrets.EMAIL_KKOVAACS }}" >> $GITHUB_ENV
           elif [ "${{ github.actor }}" == CHr15F0x ]; then
-            email=${{ secrets.EMAIL_CHR15F0X }}
+            echo "email=${{ secrets.EMAIL_CHR15F0X }}" >> $GITHUB_ENV
           elif [ "${{ github.actor }}" == sergey-melnychuk ]; then
-            email=${{ secrets.EMAIL_SERGEY }}
+            echo "email=${{ secrets.EMAIL_SERGEY }}" >> $GITHUB_ENV
           else
-            email=${{ secrets.EMAIL_MIRKO }}
+            echo "email=${{ secrets.EMAIL_MIRKO }}" >> $GITHUB_ENV
           fi
 
           gh pr review --approve
-          gh pr merge --delete-branch --author-email ${email} --merge
+          gh pr merge --delete-branch --author-email ${{ env.email }} --merge
             
       - name: Tag & release notes
         env:
