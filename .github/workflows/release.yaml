@@ -61,7 +61,7 @@ jobs:
           fi
 
           gh pr review --approve
-          gh pr merge --delete-branch --author-email $email --merge
+          gh pr merge --delete-branch --author-email $(email) --merge
             
       - name: Tag & release notes
         env:
